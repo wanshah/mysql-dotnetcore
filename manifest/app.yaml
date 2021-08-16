@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dotnet
+  name: dotnet
+  namespace: dotnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dotnet
+    spec:
+      containers:
+      - name: dotnet
+        image: nashadabdulrahiman/dotnet-app:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: 'server=dotnet-mysql;userid=root;password=password;database=testdb;'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dotnet
+  name: dotnet
+  namespace: dotnet
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30006
+    name: http
+  selector:
+    app: dotnet
+  sessionAffinity: None
+  type: NodePort
