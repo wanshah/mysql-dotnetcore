@@ -1,0 +1,1 @@
+/home/rancher/aspnetcoresourcecode/.sonarqube/out/0

@@ -1,0 +1,115 @@
+// Uses Declarative syntax to run commands inside a container.
+//    image: mcr.microsoft.com/dotnet/sdk:3.1
+pipeline {
+  agent none
+  stages {
+      stage('Build') {
+      agent {
+        kubernetes {
+
+          yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: shell
+    image: nashadabdulrahiman/dotnet-sonarscanner:v1
+    securityContext:
+      privileged: true
+    command:
+     - cat
+    tty: true
+'''
+         
+          // Can also wrap individual steps:
+          // container('shell') {
+          //     sh 'hostname'
+          // }
+          defaultContainer 'shell'
+        }
+      }
+      stages {
+        stage('Checkout Source') {
+          steps {
+            git 'https://github.com/nashad-abdul-rahiman/mysql-dotnetcore.git'
+          }
+        }
+        
+        stage('dotnet build') {
+          steps {
+            script {
+              sh 'dotnet restore "MySqlDotnetCore/MySqlDotnetCore.csproj"'
+              sh 'dotnet build "MySqlDotnetCore/MySqlDotnetCore.csproj" -c Release -o /app/build'
+            }
+          }
+        }
+        
+        stage('SonarQube Analysis') {
+          steps {
+            script {
+            withSonarQubeEnv('sonarScanerServer') {
+              sh "dotnet sonarscanner begin /k:'netcoreapp' /d:sonar.login='cb08406c7875130bb8f10468317f07d6237f16c6' /d:sonar.host.url=${env.SONAR_HOST_URL}"
+              sh 'dotnet build "MySqlDotnetCore/MySqlDotnetCore.csproj" -c Release -o /app/build'
+              sh 'dotnet-sonarscanner end /d:sonar.login="cb08406c7875130bb8f10468317f07d6237f16c6"'
+            }
+
+            }
+          } 
+
+        }
+      }
+
+      }  
+      
+      stage('Push to Repo') {
+      agent {
+        kubernetes {
+
+          yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: docker
+    image: docker:19.03.1-dind
+    securityContext:
+      privileged: true
+    env:
+      - name: DOCKER_TLS_CERTDIR
+        value: ""
+'''
+         
+          // Can also wrap individual steps:
+          // container('shell') {
+          //     sh 'hostname'
+          // }
+          defaultContainer 'docker'
+        }
+      }
+      stages {
+        stage("Build image") {
+          steps {
+            git 'https://github.com/nashad-abdul-rahiman/mysql-dotnetcore.git'
+            sh 'docker build -t hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:${BUILD_ID} .'
+            sh 'docker tag hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:${BUILD_ID} hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:latest'
+          }
+        }
+        stage("Push image") {
+          steps {
+            sh 'mkdir -pv /etc/docker/certs.d/hpranchernode1.uemedgenta.com:30008'
+            sh 'wget --no-check-certificate https://hpranchernode1.uemedgenta.com:30008/api/v2.0/systeminfo/getcert'
+            sh 'mv getcert /etc/docker/certs.d/hpranchernode1.uemedgenta.com:30008/ca.crt'
+            sh 'cat /etc/docker/certs.d/hpranchernode1.uemedgenta.com:30008/ca.crt'
+            withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+              sh 'docker login  hpranchernode1.uemedgenta.com:30008 -u $USERNAME -p $PASSWORD'
+            }
+            sh 'docker push hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:${BUILD_ID}'
+            sh 'docker push hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:latest'
+          }
+        }          
+      }
+          
+      }
+
+   }
+}

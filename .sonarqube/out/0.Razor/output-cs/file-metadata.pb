@@ -1,0 +1,11 @@
+á
+|/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Areas/Identity/Pages/_ViewStart.cshtml.g.csutf-8x
+m/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Home/Index.cshtml.g.csutf-8z
+o/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Home/Privacy.cshtml.g.csutf-8z
+o/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Shared/Error.cshtml.g.csutf-8|
+q/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Shared/_Layout.cshtml.g.csutf-8Ç
+w/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Shared/_LoginPartial.cshtml.g.csutf-8è
+É/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/Shared/_ValidationScriptsPartial.cshtml.g.csutf-8z
+o/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/_ViewImports.cshtml.g.csutf-8x
+m/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/Razor/Views/_ViewStart.cshtml.g.csutf-8Ä
+u/home/rancher/aspnetcoresourcecode/MySqlDotnetCore/obj/Debug/netcoreapp3.1/MySqlDotnetCore.RazorTargetAssemblyInfo.csutf-8
