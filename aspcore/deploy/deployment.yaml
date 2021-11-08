@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: dotnet
-  name: dotnet
-  namespace: dotnet
+    app: dotnet-blog
+  name: dotnet-blog
+  namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: dotnet
+      app: dotnet-blog
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,11 +18,11 @@ spec:
   template:
     metadata:
       labels:
-        app: dotnet
+        app: dotnet-blog
     spec:
       containers:
       - name: dotnet
-        image: nashadabdulrahiman/dotnet-app:v1
+        image:  hpranchernode1.uemedgenta.com:30008/uem/netcoreapp:31
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -30,14 +30,18 @@ spec:
         env:
         - name: ConnectionStrings__DefaultConnection
           value: 'server=dotnet-mysql;userid=root;password=password;database=testdb;'
+      imagePullSecrets:
+      - name: regcred
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: dotnet
-  name: dotnet
-  namespace: dotnet
+    app: dotnet-blog
+  name: dotnet-blog
+  namespace: default
 spec:
   ports:
   - port: 80
@@ -46,6 +50,7 @@ spec:
     nodePort: 30006
     name: http
   selector:
-    app: dotnet
+    app: dotnet-blog
   sessionAffinity: None
   type: NodePort
+---
