@@ -1,0 +1,7 @@
+secretGenerator:
+- name: mysql-pass
+  literals:
+  - password=pass123
+resources:
+  - deploy/database.yaml
+  - deploy/deployment.yaml
