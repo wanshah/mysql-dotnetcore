@@ -26,7 +26,6 @@ namespace MySqlDotnetCore.Controllers
         public IActionResult Privacy()
         {
             return View();
-            return test();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
