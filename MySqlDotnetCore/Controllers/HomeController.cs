@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MySqlDotnetCore.Models;
 
-namespace MySqlDotnetCore1.Controllers
+namespace MySqlDotnetCore.Controllers
 {
     public class HomeController : Controller
     {
