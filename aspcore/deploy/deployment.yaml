@@ -4,7 +4,7 @@ metadata:
   labels:
     app: dotnet-blog
   name: dotnet-blog
-  namespace: default
+  namespace: dotnetblogwan
 spec:
   replicas: 2
   selector:
@@ -41,7 +41,7 @@ metadata:
   labels:
     app: dotnet-blog
   name: dotnet-blog
-  namespace: default
+  namespace: dotnetblogwan
 spec:
   ports:
   - port: 80
